@@ -28,27 +28,42 @@ function isPalindrome(str) {
  * @returns {boolean}
  */
  function isAnagrams(firstWord, secondWord) {
-    const normalizedFirstString  = firstWord.toLowerCase().replace(/[^a-zа-яё0-9]/g, '');
-    const normalizedSecondString = secondWord.toLowerCase().replace(/[^a-zа-яё0-9]/g, '');
   
-    if (normalizedFirstString.length !== normalizedSecondString.length) return false;
-  
-    const counts = Object.create(null);
-  
+  const normalizedFirstString = firstWord
+      .toLowerCase()
+      .replace(/ /g, '');
 
-    for (let i = 0; i < normalizedFirstString.length; i++) {
-      const symbol = normalizedFirstString[i];
-      counts[symbol] = (counts[symbol] || 0) + 1;
-    }
-  
-    for (let i = 0; i < normalizedSecondString.length; i++) {
-      const symbol = normalizedSecondString[i];
-      if (!counts[symbol]) return false;
-      counts[symbol]--;
-    }
-  
-    return true;
+  const normalizedSecondString = secondWord
+      .toLowerCase()
+      .replace(/ /g, '');
+
+  if (normalizedFirstString.length !== normalizedSecondString.length) {
+      return false;
   }
+
+  if (normalizedFirstString === normalizedSecondString) {
+      return false;
+  }
+
+  const counts = {};
+
+  for (let i = 0; i < normalizedFirstString.length; i++) {
+      const char = normalizedFirstString[i];
+      counts[char] = (counts[char] || 0) + 1;
+  }
+
+  for (let i = 0; i < normalizedSecondString.length; i++) {
+      const char = normalizedSecondString[i];
+
+      if (!counts[char]) {
+          return false;
+      }
+
+      counts[char]--;
+  }
+
+  return true;
+}
 
 console.log('Palindrome:')
 console.log(isPalindrome("RaceCar")); // true
@@ -59,5 +74,5 @@ console.log('Anagrams:')
 console.log(isAnagrams("Топор", "ропот")); // true
 console.log(isAnagrams("казан", "наказ")); // true
 console.log(isAnagrams("listen", "silent")); // true
-console.log(isAnagrams("hello", "olelh!")); // true
+console.log(isAnagrams("hello", "olelh!")); // false
 console.log(isAnagrams("hello", "world")); // false
